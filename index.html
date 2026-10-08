@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PCOC 家屬照護經驗與滿意度問卷</title>
+<style>
+:root{--bg:#f4f7f7;--card:#fff;--ink:#18302f;--muted:#667876;--line:#d8e1df;--brand:#237d70;--brand2:#e7f3f0;--danger:#b64b4b;--gold:#9c7a22}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.55}
+.wrap{max-width:920px;margin:0 auto;padding:20px 16px 56px}
+.hero{padding:8px 4px 18px} h1{font-size:28px;margin:0 0 4px} .sub{color:var(--muted);font-size:14px}
+.bar{height:8px;background:var(--brand);border-radius:99px;margin-top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 5px 18px rgba(0,0,0,.04)}
+.note{background:var(--brand2);border-radius:14px;padding:14px 16px;font-size:14px}
+.field{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:16px;color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.q{padding:18px 0;border-top:1px solid var(--line)} .q:first-child{border-top:0;padding-top:4px}
+.qtitle{font-size:17px;font-weight:700;margin-bottom:10px} .domain{font-size:13px;color:var(--brand);font-weight:700;margin-bottom:4px}
+.likert{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.choice{position:relative;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 4px;text-align:center;cursor:pointer;user-select:none;min-height:70px;display:flex;flex-direction:column;justify-content:center}
+.choice input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:2}
+.choice strong{display:block;font-size:19px} .choice small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.choice:has(input:checked){border-color:var(--brand);background:var(--brand2);box-shadow:inset 0 0 0 1px var(--brand)}
+.choice.checked{border-color:var(--brand);background:var(--brand2);box-shadow:inset 0 0 0 1px var(--brand)}
+.branch{display:none}
+textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;resize:vertical}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.btn{border:0;border-radius:13px;padding:14px 16px;font-size:16px;font-weight:700;cursor:pointer}
+.primary{background:var(--brand);color:#fff} .secondary{background:#eef3f2;color:var(--ink)}
+.tiny{font-size:12px;color:var(--muted)} .error{color:var(--danger);font-size:13px;margin-top:8px;display:none}
+.progress{height:8px;background:#e9efee;border-radius:99px;overflow:hidden;margin-top:10px} .progress>div{height:100%;width:0;background:var(--brand);transition:.2s}
+.success{display:none} .success h2{font-size:28px;margin:0 0 8px}
+.summary-title{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.bigscore{font-size:34px;font-weight:800;color:var(--brand)}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+th,td{border:1px solid var(--line);padding:10px 8px;text-align:left;vertical-align:middle}
+th{background:#eef5f3} td.num{text-align:center;font-weight:700}
+.pill{display:inline-block;padding:3px 8px;border-radius:99px;background:var(--brand2);color:var(--brand);font-weight:700;font-size:12px}
+.admin{margin-top:20px;border-top:1px dashed var(--line);padding-top:12px}
+details summary{cursor:pointer;color:var(--muted);font-size:13px}
+@media(max-width:680px){h1{font-size:24px} .grid{grid-template-columns:1fr} .likert{grid-template-columns:repeat(3,1fr)} .actions{grid-template-columns:1fr} .card{padding:16px} th,td{padding:8px 6px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>PCOC 家屬照護經驗與滿意度問卷</h1>
+    <div class="sub">重症照護品質改善用｜短版問卷｜V1.1.1</div>
+    <div class="bar"></div>
+  </div>
+
+  <div id="formArea">
+    <div class="card">
+      <div class="note">感謝您分享這段照護期間的經驗。這份問卷是為了改善重症照護與家屬支持，不會影響病人的醫療權益。請依您實際感受作答；若題目不適用，可選擇「不適用」。</div>
+      <div class="grid" style="margin-top:14px">
+        <div><label class="tiny">病房別</label><select id="unit" class="field">
+          <option value="">請選擇</option><option>3BI team 1</option><option>3BI team 2</option><option>3CI</option><option>4BI</option><option>5CI</option><option>6BI</option><option>燒傷加護病房</option><option>RCC</option>
+        </select></div>
+        <div><label class="tiny">本次照護結束的情況</label><select id="closureReason" class="field">
+          <option value="">請選擇</option><option value="transfer">轉至其他病房</option><option value="hospice">轉至安寧病房</option><option value="discharge">出院返家</option><option value="self_discharge">自行要求出院</option><option value="death">病人過世</option><option value="other">其他</option>
+        </select></div>
+        <div><label class="tiny">填答者與病人關係（選填）</label><select id="relation" class="field">
+          <option value="">不填寫</option><option>配偶</option><option>子女</option><option>父母</option><option>兄弟姊妹</option><option>其他親屬</option><option>其他</option>
+        </select></div>
+      </div>
+      <input type="hidden" id="caseId" value="">
+      <div class="progress"><div id="progressBar"></div></div>
+      <div class="tiny" id="progressText" style="margin-top:6px">尚未開始作答</div>
+    </div>
+
+    <div class="card" id="questions">
+      <div class="q">
+      <div class="domain">溝通與資訊</div>
+      <div class="qtitle">1. 醫療團隊能以我可以理解的方式說明病人的病情。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="info_clear" value="1" data-q="info_clear">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="info_clear" value="2" data-q="info_clear">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="info_clear" value="3" data-q="info_clear">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="info_clear" value="4" data-q="info_clear">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="info_clear" value="5" data-q="info_clear">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="info_clear" value="NA" data-q="info_clear">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">溝通與資訊</div>
+      <div class="qtitle">2. 當病況有重要變化時，我能適時得到相關資訊。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="info_timely" value="1" data-q="info_timely">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="info_timely" value="2" data-q="info_timely">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="info_timely" value="3" data-q="info_timely">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="info_timely" value="4" data-q="info_timely">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="info_timely" value="5" data-q="info_timely">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="info_timely" value="NA" data-q="info_timely">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">參與與決策</div>
+      <div class="qtitle">3. 醫療團隊有聽取我或家人的想法與擔心。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="family_heard" value="1" data-q="family_heard">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="family_heard" value="2" data-q="family_heard">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="family_heard" value="3" data-q="family_heard">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="family_heard" value="4" data-q="family_heard">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="family_heard" value="5" data-q="family_heard">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="family_heard" value="NA" data-q="family_heard">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">參與與決策</div>
+      <div class="qtitle">4. 在重要醫療或照護決策中，我感覺自己有被適當地納入討論。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="decision_involvement" value="1" data-q="decision_involvement">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="decision_involvement" value="2" data-q="decision_involvement">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="decision_involvement" value="3" data-q="decision_involvement">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="decision_involvement" value="4" data-q="decision_involvement">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="decision_involvement" value="5" data-q="decision_involvement">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="decision_involvement" value="NA" data-q="decision_involvement">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">症狀與舒適照護</div>
+      <div class="qtitle">5. 我認為病人的疼痛、呼吸困難或其他不舒服有受到適當處理。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="symptom_control" value="1" data-q="symptom_control">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="symptom_control" value="2" data-q="symptom_control">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="symptom_control" value="3" data-q="symptom_control">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="symptom_control" value="4" data-q="symptom_control">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="symptom_control" value="5" data-q="symptom_control">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="symptom_control" value="NA" data-q="symptom_control">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">症狀與舒適照護</div>
+      <div class="qtitle">6. 我感覺醫療團隊重視病人的舒適、尊嚴與個別需求。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="comfort_dignity" value="1" data-q="comfort_dignity">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="comfort_dignity" value="2" data-q="comfort_dignity">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="comfort_dignity" value="3" data-q="comfort_dignity">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="comfort_dignity" value="4" data-q="comfort_dignity">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="comfort_dignity" value="5" data-q="comfort_dignity">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="comfort_dignity" value="NA" data-q="comfort_dignity">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">家屬支持</div>
+      <div class="qtitle">7. 當我有焦慮、擔心或不知道該怎麼辦時，可以獲得醫療團隊的協助。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="family_support" value="1" data-q="family_support">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="family_support" value="2" data-q="family_support">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="family_support" value="3" data-q="family_support">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="family_support" value="4" data-q="family_support">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="family_support" value="5" data-q="family_support">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="family_support" value="NA" data-q="family_support">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">家屬支持</div>
+      <div class="qtitle">8. 我知道遇到問題時，可以向誰詢問或尋求協助。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="contact_clarity" value="1" data-q="contact_clarity">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="contact_clarity" value="2" data-q="contact_clarity">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="contact_clarity" value="3" data-q="contact_clarity">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="contact_clarity" value="4" data-q="contact_clarity">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="contact_clarity" value="5" data-q="contact_clarity">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="contact_clarity" value="NA" data-q="contact_clarity">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">準備度</div>
+      <div class="qtitle">9. 醫療團隊有協助我了解接下來可能發生的情況及需要準備的事情。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="preparedness" value="1" data-q="preparedness">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="preparedness" value="2" data-q="preparedness">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="preparedness" value="3" data-q="preparedness">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="preparedness" value="4" data-q="preparedness">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="preparedness" value="5" data-q="preparedness">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="preparedness" value="NA" data-q="preparedness">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div><div class="q">
+      <div class="domain">整體評價</div>
+      <div class="qtitle">10. 整體而言，我對這次住院期間所接受的照護感到滿意。</div>
+      <div class="likert"><label class="choice">
+              <input type="radio" name="overall_satisfaction" value="1" data-q="overall_satisfaction">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="overall_satisfaction" value="2" data-q="overall_satisfaction">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="overall_satisfaction" value="3" data-q="overall_satisfaction">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="overall_satisfaction" value="4" data-q="overall_satisfaction">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="overall_satisfaction" value="5" data-q="overall_satisfaction">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="overall_satisfaction" value="NA" data-q="overall_satisfaction">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+    </div>
+      <div class="q branch" id="branchTransfer">
+  <div class="domain">轉銜準備</div>
+  <div class="qtitle">11A. 在病人離開 ICU／RCC 前，我覺得自己已獲得足夠資訊，知道接下來的照護方向。</div>
+  <div class="likert"><label class="choice">
+              <input type="radio" name="transition_preparedness" value="1" data-q="transition_preparedness">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="transition_preparedness" value="2" data-q="transition_preparedness">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="transition_preparedness" value="3" data-q="transition_preparedness">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="transition_preparedness" value="4" data-q="transition_preparedness">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="transition_preparedness" value="5" data-q="transition_preparedness">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="transition_preparedness" value="NA" data-q="transition_preparedness">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+</div>
+      <div class="q branch" id="branchDeath">
+  <div class="domain">生命末期準備</div>
+  <div class="qtitle">11B. 在病人生命末期，我覺得醫療團隊有協助我們理解病情變化，並為可能的死亡做好準備。</div>
+  <div class="likert"><label class="choice">
+              <input type="radio" name="end_of_life_preparedness" value="1" data-q="end_of_life_preparedness">
+              <strong>1</strong><small>非常不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="end_of_life_preparedness" value="2" data-q="end_of_life_preparedness">
+              <strong>2</strong><small>不同意</small>
+            </label><label class="choice">
+              <input type="radio" name="end_of_life_preparedness" value="3" data-q="end_of_life_preparedness">
+              <strong>3</strong><small>普通</small>
+            </label><label class="choice">
+              <input type="radio" name="end_of_life_preparedness" value="4" data-q="end_of_life_preparedness">
+              <strong>4</strong><small>同意</small>
+            </label><label class="choice">
+              <input type="radio" name="end_of_life_preparedness" value="5" data-q="end_of_life_preparedness">
+              <strong>5</strong><small>非常同意</small>
+            </label><label class="choice">
+              <input type="radio" name="end_of_life_preparedness" value="NA" data-q="end_of_life_preparedness">
+              <strong>—</strong><small>不適用</small>
+            </label></div>
+</div>
+    </div>
+
+    <div class="card">
+      <div class="domain">其他回饋</div>
+      <div class="qtitle">12. 這次照護中，有沒有哪一件事情讓您特別感受到幫助，或有什麼地方希望我們做得更好？</div>
+      <textarea id="comment" placeholder="可自由填寫，也可以留白"></textarea>
+      <div id="submitError" class="error">請完成所有必答題，或選擇「不適用」。</div>
+      <div class="actions"><button class="btn secondary" id="clearBtn" type="button">清除重填</button><button class="btn primary" id="submitBtn" type="button">送出並產生滿意度總表</button></div>
+    </div>
+
+    <div class="card admin">
+      <details>
+        <summary>測試／管理功能</summary>
+        <div class="tiny" style="margin:10px 0">Prototype 目前僅儲存在本機瀏覽器。正式版建議寫入獨立 SharePoint List：PCOC_FamilySurvey。</div>
+        <div class="actions"><button class="btn secondary" id="exportBtn" type="button">匯出逐筆 CSV</button><button class="btn secondary" id="aggregateBtn" type="button">顯示累積滿意度總表</button></div>
+        <div id="aggregateArea" style="display:none;margin-top:14px"></div>
+      </details>
+    </div>
+  </div>
+
+  <div class="card success" id="success">
+    <div class="summary-title">
+      <div><span class="pill">本次問卷結果</span><h2>家屬滿意度總表</h2></div>
+      <div><div class="tiny">有效題目平均</div><div class="bigscore" id="overallMean">—</div></div>
+    </div>
+    <div class="tiny">「不適用」不納入平均。此總表供品質改善使用，不代表經正式驗證量表之標準化總分。</div>
+    <div id="summaryTable"></div>
+    <div class="actions"><button class="btn secondary" id="copySummaryBtn" type="button">複製總表摘要</button><button class="btn primary" id="newBtn" type="button">填寫下一份問卷</button></div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='pcoc_family_survey_v11';
+const answers={};
+const coreQuestionIds=['info_clear', 'info_timely', 'family_heard', 'decision_involvement', 'symptom_control', 'comfort_dignity', 'family_support', 'contact_clarity', 'preparedness', 'overall_satisfaction'];
+const domainMap={
+  '溝通與資訊':['info_clear','info_timely'],
+  '參與與決策':['family_heard','decision_involvement'],
+  '症狀與舒適照護':['symptom_control','comfort_dignity'],
+  '家屬支持':['family_support','contact_clarity'],
+  '準備度':['preparedness']
+};
+const idLabels={
+  info_clear:'病情說明清楚',
+  info_timely:'資訊提供及時',
+  family_heard:'聽取家屬想法',
+  decision_involvement:'參與重要決策',
+  symptom_control:'症狀處理',
+  comfort_dignity:'舒適與尊嚴',
+  family_support:'家屬支持',
+  contact_clarity:'求助管道清楚',
+  preparedness:'後續準備',
+  overall_satisfaction:'整體滿意度',
+  transition_preparedness:'轉銜準備',
+  end_of_life_preparedness:'生命末期準備'
+};
+
+function activeQuestionIds(){
+  const c=document.getElementById('closureReason').value;
+  if(c==='death') return [...coreQuestionIds,'end_of_life_preparedness'];
+  if(c) return [...coreQuestionIds,'transition_preparedness'];
+  return coreQuestionIds;
+}
+function syncCheckedClasses(q){
+  document.querySelectorAll(`input[name="${q}"]`).forEach(inp=>inp.closest('.choice').classList.toggle('checked',inp.checked));
+}
+document.addEventListener('change',e=>{
+  if(e.target.matches('input[type="radio"][data-q]')){
+    const q=e.target.dataset.q;
+    answers[q]=e.target.value==='NA'?null:Number(e.target.value);
+    syncCheckedClasses(q);
+    updateProgress();
+  }
+});
+function updateBranch(){
+  const c=document.getElementById('closureReason').value;
+  document.getElementById('branchTransfer').style.display=(c && c!=='death')?'block':'none';
+  document.getElementById('branchDeath').style.display=c==='death'?'block':'none';
+  if(c==='death'){delete answers.transition_preparedness; document.querySelectorAll('input[name="transition_preparedness"]').forEach(x=>x.checked=false)}
+  else {delete answers.end_of_life_preparedness; document.querySelectorAll('input[name="end_of_life_preparedness"]').forEach(x=>x.checked=false)}
+  updateProgress();
+}
+function updateProgress(){
+  const ids=activeQuestionIds(), done=ids.filter(id=>Object.prototype.hasOwnProperty.call(answers,id)).length;
+  const pct=Math.round(done/ids.length*100);
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressText').textContent=`已完成 ${done} / ${ids.length} 題`;
+}
+function mean(vals){const x=vals.filter(v=>typeof v==='number');return x.length?x.reduce((a,b)=>a+b,0)/x.length:null}
+function satRate(vals){const x=vals.filter(v=>typeof v==='number');return x.length?x.filter(v=>v>=4).length/x.length*100:null}
+function fmt(v,d=2){return v===null||Number.isNaN(v)?'—':Number(v).toFixed(d)}
+function buildSummary(row){
+  const domains={...domainMap};
+  domains['準備度']=[...domains['準備度'], row.closure_reason==='death'?'end_of_life_preparedness':'transition_preparedness'];
+  const rows=[];
+  Object.entries(domains).forEach(([name,ids])=>{
+    const vals=ids.map(id=>row[id]);
+    rows.push({name,mean:mean(vals),sat:satRate(vals),n:vals.filter(v=>typeof v==='number').length});
+  });
+  rows.push({name:'整體滿意度（Q10）',mean:typeof row.overall_satisfaction==='number'?row.overall_satisfaction:null,sat:typeof row.overall_satisfaction==='number'?(row.overall_satisfaction>=4?100:0):null,n:typeof row.overall_satisfaction==='number'?1:0});
+  const allIds=[...coreQuestionIds.filter(x=>x!=='overall_satisfaction'),row.closure_reason==='death'?'end_of_life_preparedness':'transition_preparedness'];
+  const overall=mean(allIds.map(id=>row[id]));
+  return {rows,overall};
+}
+function summaryTableHtml(summary){
+ return `<table><thead><tr><th>構面</th><th>有效題數</th><th>平均分數 / 5</th><th>滿意（4–5分）</th></tr></thead><tbody>`+
+ summary.rows.map(r=>`<tr><td>${r.name}</td><td class="num">${r.n}</td><td class="num">${fmt(r.mean)}</td><td class="num">${r.sat===null?'—':fmt(r.sat,1)+'%'}</td></tr>`).join('')+
+ `</tbody></table>`;
+}
+function loadRecords(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch(e){return[]}}
+function saveRecords(rows){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(rows));return true}catch(e){return false}}
+function makeId(){return 'FS-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
+let lastRow=null;
+function submitSurvey(){
+ const unit=document.getElementById('unit').value, closure=document.getElementById('closureReason').value;
+ if(!unit||!closure){alert('請先選擇病房別與本次照護結束的情況。');return}
+ const ids=activeQuestionIds();
+ if(ids.some(id=>!Object.prototype.hasOwnProperty.call(answers,id))){
+   document.getElementById('submitError').style.display='block';return;
+ }
+ document.getElementById('submitError').style.display='none';
+ const row={
+   survey_id:makeId(),submitted_at:new Date().toISOString(),case_id:document.getElementById('caseId').value||null,
+   unit,closure_reason:closure,respondent_relation:document.getElementById('relation').value||null,
+   family_comment:document.getElementById('comment').value.trim()||null,survey_version:'1.1.1'
+ };
+ [...coreQuestionIds,'transition_preparedness','end_of_life_preparedness'].forEach(id=>row[id]=Object.prototype.hasOwnProperty.call(answers,id)?answers[id]:null);
+ const rows=loadRecords();rows.push(row);saveRecords(rows);lastRow=row;
+ const s=buildSummary(row);
+ document.getElementById('overallMean').textContent=s.overall===null?'—':fmt(s.overall);
+ document.getElementById('summaryTable').innerHTML=summaryTableHtml(s);
+ document.getElementById('formArea').style.display='none';
+ document.getElementById('success').style.display='block';
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function clearForm(){
+ if(!confirm('確定清除目前填答內容？'))return;
+ Object.keys(answers).forEach(k=>delete answers[k]);
+ document.querySelectorAll('input[type="radio"]').forEach(x=>{x.checked=false;x.closest('.choice').classList.remove('checked')});
+ document.getElementById('unit').value='';document.getElementById('closureReason').value='';document.getElementById('relation').value='';document.getElementById('comment').value='';
+ updateBranch();updateProgress();
+}
+function csvEscape(v){if(v===null||v===undefined)return '';const s=String(v);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
+function exportCsv(){
+ const rows=loadRecords();if(!rows.length){alert('目前沒有測試資料');return}
+ const cols=['survey_id','submitted_at','case_id','unit','closure_reason','respondent_relation',...coreQuestionIds,'transition_preparedness','end_of_life_preparedness','family_comment','survey_version'];
+ const csv=[cols.join(','),...rows.map(r=>cols.map(c=>csvEscape(r[c])).join(','))].join('\n');
+ const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='PCOC_FamilySurvey_V1.1.csv';a.click();URL.revokeObjectURL(a.href);
+}
+function aggregateSummary(){
+ const rows=loadRecords();if(!rows.length){alert('目前沒有測試資料');return}
+ const allDomain={'溝通與資訊':['info_clear','info_timely'],'參與與決策':['family_heard','decision_involvement'],'症狀與舒適照護':['symptom_control','comfort_dignity'],'家屬支持':['family_support','contact_clarity'],'準備度':['preparedness','transition_preparedness','end_of_life_preparedness'],'整體滿意度（Q10）':['overall_satisfaction']};
+ let html=`<div class="summary-title"><div><b>累積滿意度總表</b><div class="tiny">共 ${rows.length} 份問卷</div></div></div><table><thead><tr><th>構面</th><th>有效回答數</th><th>平均分數 / 5</th><th>滿意（4–5分）</th></tr></thead><tbody>`;
+ Object.entries(allDomain).forEach(([name,ids])=>{
+   const vals=[];rows.forEach(r=>ids.forEach(id=>{if(typeof r[id]==='number')vals.push(r[id])}));
+   html+=`<tr><td>${name}</td><td class="num">${vals.length}</td><td class="num">${fmt(mean(vals))}</td><td class="num">${satRate(vals)===null?'—':fmt(satRate(vals),1)+'%'}</td></tr>`;
+ });
+ html+='</tbody></table>';
+ const area=document.getElementById('aggregateArea');area.innerHTML=html;area.style.display='block';
+}
+async function copySummary(){
+ if(!lastRow)return;
+ const s=buildSummary(lastRow);
+ const lines=['PCOC 家屬滿意度總表',`病房別：${lastRow.unit}`,...s.rows.map(r=>`${r.name}：${fmt(r.mean)} / 5（滿意 ${r.sat===null?'—':fmt(r.sat,1)+'%'}）`),`有效題目平均：${fmt(s.overall)} / 5`];
+ const text=lines.join('\n');
+ try{await navigator.clipboard.writeText(text);alert('已複製滿意度總表摘要')}catch(e){prompt('請手動複製：',text)}
+}
+document.getElementById('closureReason').addEventListener('change',updateBranch);
+document.getElementById('submitBtn').onclick=submitSurvey;
+document.getElementById('clearBtn').onclick=clearForm;
+document.getElementById('exportBtn').onclick=exportCsv;
+document.getElementById('aggregateBtn').onclick=aggregateSummary;
+document.getElementById('copySummaryBtn').onclick=copySummary;
+document.getElementById('newBtn').onclick=()=>location.reload();
+
+const params=new URLSearchParams(location.search);
+const linkedCaseId=params.get('case_id')||''; if(linkedCaseId)document.getElementById('caseId').value=linkedCaseId;
+const linkedUnit=params.get('unit')||''; if(linkedUnit&&[...document.getElementById('unit').options].some(o=>o.value===linkedUnit))document.getElementById('unit').value=linkedUnit;
+updateBranch();updateProgress();
+</script>
+</body></html>
